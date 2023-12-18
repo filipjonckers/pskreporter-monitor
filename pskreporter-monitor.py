@@ -24,8 +24,17 @@ class Spot:
     b: str  # band
 
     # ADIF country codes: https://www.adif.org/304/ADIF_304.htm#Country_Codes
+
+    def __post_init__(self):
+        # replace dot with stroke to support calls like '/P' '/QRP' ...
+        self.sc = self.sc.replace('.', '/')
+        self.rc = self.rc.replace('.', '/')
+        # locators in uppercase
+        self.sl = self.sl.upper()
+        self.rl = self.rl.upper()
+
     def __str__(self):
-        return f"{self.f / 1000000:10f} {self.b:<4s} {self.md:<4s} {self.rp:3d} {self.sc:<10s} {self.rc:<10s} {self.sl[:6].upper():<6s} {self.rl[:6].upper():<6s}"
+        return f"{self.f / 1000000:10f} {self.b:<4s} {self.md:<4s} {self.rp:3d} {self.sc:<10s} -> {self.rc:<10s} loc:{self.sl[:6]:<6s} -> {self.rl[:6]:<6s}"
 
 
 def load_config():
