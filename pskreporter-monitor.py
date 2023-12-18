@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+import time
 from dataclasses import dataclass
 
 import paho.mqtt.client as mqtt
@@ -82,10 +83,10 @@ def main():
     logging.info("pskreporter-monitor starting ...")
     logging.info(f"Connecting to {broker_host}:{broker_port} ...")
     client.connect(broker_host, broker_port, broker_timeout)
-    client.loop_start()
+    client.loop_start() # start MQTT client in new thread
     try:
         while True:
-            pass
+            time.sleep(1)
     except KeyboardInterrupt:
         logging.info("Disconnected. Exiting...")
         client.disconnect()
