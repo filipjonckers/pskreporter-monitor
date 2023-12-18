@@ -58,8 +58,16 @@ def callback_on_disconnect(client, userdata, rc):
 
 def subscribe():
     if connected:
-        logging.info(f"subscribing to {sub}...")
-        client.subscribe(sub)
+        for tx in config.get('transmitters', ['+']):
+            for rx in config.get('receivers', ['+']):
+                for band in config.get('bands', ['+']):
+                    for mode in config.get('modes', ['+']):
+                        for txloc in config.get('txlocators', ['+']):
+                            for rxloc in config.get('rxlocators', ['+']):
+                                sub = f"pskr/filter/v2/{band}/{mode}/{tx}/{rx}/{txloc}/{rxloc}/#"
+                                logging.info(f"subscribing to {sub}...")
+                                client.subscribe(sub)
+                                # pskr/filter/v2/{band}/{mode}/{sendercall}/{receivercall}/{senderlocator}/{receiverlocator}
 
 
 def get_mqtt_client():
@@ -89,20 +97,13 @@ if __name__ == "__main__":
     connected = False
 
     logger_level = config.get('LOG_LEVEL', 'INFO')
-    logger_format = config.get('LOG_FORMAT', '%(asctime)-15s %(levelname)s:%(funcName)s:%(lineno)d:%(message)s')
+    logger_format = config.get('LOG_FORMAT', '%(asctime)-15s %(message)s')
     logging.basicConfig(stream=sys.stdout, level=logger_level, format=logger_format)
 
-    callsigns = config.get('callsigns')
-    locators = config.get('locators')
     broker_host = config.get('broker-host', 'mqtt.pskreporter.info')
     broker_port = config.get('broker-port', 1883)
     broker_timeout = config.get('broker-timeout', 60)
-    broker_id = config.get('broker-id', 'pskreporter-monitor')
-    sub = config.get('sub')
-
-    logging.info(f"callsigns = {callsigns}")
-    logging.info(f"locators = {locators}")
-    logging.info(f"broker = {broker_host} : {broker_port}")
+    broker_id = f"pskreporter-monitor: {config.get('id', '')}"
 
     client = get_mqtt_client()
 

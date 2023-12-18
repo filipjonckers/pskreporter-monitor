@@ -1,14 +1,29 @@
-callsigns:
+# used to identify who is using the MQTT feed
+id: ON4FF
+# Possible filters:
+# transmitters: transmitting station(s) - example: DXpeditions you want to monitor
+# receivers: receiving station(s)
+# bands: band name (10m, 20m, 2m, ...)
+# modes: mode name (FT8, CW, ...)
+# rxlocator: receiver locator(s) prefix - example: your own locator box
+# txlocator: transmitter locator(s) prefix
+#
+# if only one filter item then use the MQTT filter wildcard: "+" or do not specify the filter, default = ['+']
+transmitters:
   - ON4FF
-locators:
+  - ON5LL
+bands:
+  - +
+rxlocators:
   - JO
-  - IO
-  - IN
   - JN
+
+########## BROKER #################
 broker-host: 'mqtt.pskreporter.info'
 broker-port: 1883
-broker-id: ON4FF
 
-# subscription format:
+# pskreporter.info MQTT subscription format:
 # pskr/filter/v2/{band}/{mode}/{sendercall}/{receivercall}/{senderlocator}/{receiverlocator}/{sendercountry}/{receivercountry}
-sub: 'pskr/filter/v2/+/+/+/+/+/JO20/#'
+#
+# We will be using the following subscriptions:
+# pskr/filter/v2/BANDS/MODES/TRANSMITTERS/RECEIVERS/TXLOCATORS/RXLOCATORS/#
