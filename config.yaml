@@ -1,6 +1,14 @@
 callsigns:
   - ON4FF
-zones:
-  - 14
-  - 15
+locators:
+  - JO
+  - IO
+  - IN
+  - JN
+broker-host: 'mqtt.pskreporter.info'
+broker-port: 1883
+broker-id: ON4FF
 
+# subscription format:
+# pskr/filter/v2/{band}/{mode}/{sendercall}/{receivercall}/{senderlocator}/{receiverlocator}/{sendercountry}/{receivercountry}
+sub: 'pskr/filter/v2/+/+/+/+/+/JO20/#'
